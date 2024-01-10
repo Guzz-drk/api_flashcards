@@ -3,6 +3,7 @@ package br.com.guzz.reactiveflashcards.api.exceptionHandler;
 import static br.com.guzz.reactiveflashcards.domain.exception.BaseErrorMessage.GENERIC_EXCEPTION;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
+import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
 @Slf4j
+@Component
 public class ReactiveFlashcardsHandler extends AbstractHandlerException<ReactiveFlashcardsException> {
     public ReactiveFlashcardsHandler(final ObjectMapper objectMapper) {
         super(objectMapper);

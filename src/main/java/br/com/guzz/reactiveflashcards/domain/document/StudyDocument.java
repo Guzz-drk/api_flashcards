@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 import lombok.Builder;
 
-@Document(collection = "studies_decks")
+@Document(collection = "studies")
 public record StudyDocument(
                 @Id String id,
                 String userId,

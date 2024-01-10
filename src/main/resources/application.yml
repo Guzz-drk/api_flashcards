@@ -1,1 +1,6 @@
-
+spring:
+    webFlux:
+        base-path: /reactive-flashcards
+    data:
+        mongodb:
+            uri: mongodb://localhost:27017/flashcards

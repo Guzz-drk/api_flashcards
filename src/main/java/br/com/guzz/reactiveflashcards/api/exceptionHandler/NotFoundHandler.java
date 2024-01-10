@@ -2,6 +2,7 @@ package br.com.guzz.reactiveflashcards.api.exceptionHandler;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
+import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
 @Slf4j
+@Component
 public class NotFoundHandler extends AbstractHandlerException<NotFoundException> {
 
     public NotFoundHandler(final ObjectMapper objectMapper) {

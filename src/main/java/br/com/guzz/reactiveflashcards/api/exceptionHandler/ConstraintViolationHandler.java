@@ -4,6 +4,7 @@ import static br.com.guzz.reactiveflashcards.domain.exception.BaseErrorMessage.G
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 import org.hibernate.validator.internal.engine.path.PathImpl;
+import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,6 +17,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Slf4j
+@Component
 public class ConstraintViolationHandler extends AbstractHandlerException<ConstraintViolationException> {
 
     public ConstraintViolationHandler(final ObjectMapper objectMapper) {

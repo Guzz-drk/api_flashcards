@@ -1,6 +1,5 @@
 package br.com.guzz.reactiveflashcards.api.exceptionHandler;
 
-import org.springframework.context.MessageSource;
 import org.springframework.core.annotation.Order;
 
 import org.springframework.stereotype.Component;
@@ -11,7 +10,6 @@ import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebExceptionHandler;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.guzz.reactiveflashcards.domain.exception.NotFoundException;
 import br.com.guzz.reactiveflashcards.domain.exception.ReactiveFlashcardsException;
@@ -24,28 +22,41 @@ import reactor.core.publisher.Mono;
 @AllArgsConstructor
 public class ApiExceptionHandler implements WebExceptionHandler {
 
-    private final ObjectMapper objectMapper;
+        private final MethodNotAllowHandler methodNotAllowHandler;
 
-    private final MessageSource messageSource;
+        private final NotFoundHandler notFoundHandler;
 
-    @Override
-    public Mono<Void> handle(final ServerWebExchange exchange, final Throwable ex) {
-        return Mono.error(ex)
-                .onErrorResume(MethodNotAllowedException.class,
-                        e -> new MethodNotAllowHandler(objectMapper).handlerException(exchange, e))
-                .onErrorResume(NotFoundException.class,
-                        e -> new NotFoundHandler(objectMapper).handlerException(exchange, e))
-                .onErrorResume(ConstraintViolationException.class,
-                        e -> new ConstraintViolationHandler(objectMapper).handlerException(exchange, e))
-                .onErrorResume(WebExchangeBindException.class,
-                        e -> new WebExchangeBindHandler(objectMapper, messageSource).handlerException(exchange, e))
-                .onErrorResume(ResponseStatusException.class,
-                        e -> new ResponseStatusHandler(objectMapper).handlerException(exchange, e))
-                .onErrorResume(ReactiveFlashcardsException.class,
-                        e -> new ReactiveFlashcardsHandler(objectMapper).handlerException(exchange, e))
-                .onErrorResume(Exception.class, e -> new ExceptionHandler(objectMapper).handlerException(exchange, e))
-                .onErrorResume(JsonProcessingException.class,
-                        e -> new JsonProcessingHandler(objectMapper).handlerException(exchange, e))
-                .then();
-    }
+        private final ConstraintViolationHandler constraintViolationHandler;
+
+        private final WebExchangeBindHandler webExchangeBindHandler;
+
+        private final ResponseStatusHandler responseStatusHandler;
+
+        private final ReactiveFlashcardsHandler reactiveFlashcardsHandler;
+
+        private final ExceptionHandler exceptionHandler;
+
+        private final JsonProcessingHandler jsonProcessingHandler;
+
+        @Override
+        public Mono<Void> handle(final ServerWebExchange exchange, final Throwable ex) {
+                return Mono.error(ex)
+                        .onErrorResume(MethodNotAllowedException.class,
+                                        e -> methodNotAllowHandler.handlerException(exchange, e))
+                        .onErrorResume(NotFoundException.class,
+                                        e -> notFoundHandler.handlerException(exchange, e))
+                        .onErrorResume(ConstraintViolationException.class,
+                                        e -> constraintViolationHandler.handlerException(exchange, e))
+                        .onErrorResume(WebExchangeBindException.class,
+                                        e -> webExchangeBindHandler.handlerException(exchange, e))
+                        .onErrorResume(ResponseStatusException.class,
+                                        e -> responseStatusHandler.handlerException(exchange, e))
+                        .onErrorResume(ReactiveFlashcardsException.class,
+                                        e -> reactiveFlashcardsHandler.handlerException(exchange, e))
+                        .onErrorResume(Exception.class,
+                                        e -> exceptionHandler.handlerException(exchange, e))
+                        .onErrorResume(JsonProcessingException.class,
+                                        e -> jsonProcessingHandler.handlerException(exchange, e))
+                        .then();
+        }
 }

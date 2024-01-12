@@ -47,7 +47,7 @@ public class UserController {
 
     @GetMapping(produces = APPLICATION_JSON_VALUE, value = "{id}")
     public Mono<UserResponse> findById(
-            @MongoId(message = "Informe um identificador de usu\u00E0rio v\u00E0lido") @PathVariable(value = "id") @Valid final String id) {
+            @MongoId(message = "{userController.id}") @PathVariable(value = "id") @Valid final String id) {
         return userQueryService.findById(id)
                 .doFirst(() -> log.info("=== Finding a user with follow id {}", id))
                 .map(userMapper::toResponse);
@@ -55,7 +55,7 @@ public class UserController {
 
     @PutMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE, value = "{id}")
     public Mono<UserResponse> update(
-            @MongoId(message = "Informe um identificador de usu\u00E0rio v\u00E0lido") @PathVariable(value = "id") @Valid final String id,
+            @MongoId(message = "{userController.id}") @PathVariable(value = "id") @Valid final String id,
             @Valid @RequestBody final UserRequest userRequest) {
                 return userService.update(userMapper.toDocument(userRequest, id))
                 .doFirst(() -> log.info("=== Updating a user with follow info [body: {}, if: {}]", userRequest, id))
@@ -64,7 +64,7 @@ public class UserController {
 
     @DeleteMapping(value = "{id}")
     @ResponseStatus(NO_CONTENT)
-    public Mono<Void> delete(@MongoId(message = "Informe um identificador de usu\u00E0rio v\u00E0lido") @PathVariable(value = "id") @Valid final String id){
+    public Mono<Void> delete(@MongoId(message = "{userController.id}") @PathVariable(value = "id") @Valid final String id){
         return userService.delete(id)
             .doFirst(() -> log.info("=== Deleting a user with follow id {}", id));
     }

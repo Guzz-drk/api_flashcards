@@ -22,6 +22,8 @@ public class BaseErrorMessage {
 
     public static final BaseErrorMessage USER_NOT_FOUND = new BaseErrorMessage("user.notFound");
 
+    public static final BaseErrorMessage DECK_NOT_FOUND = new BaseErrorMessage("deck.notFound");
+
     private final String key;
 
     private String[] params;
